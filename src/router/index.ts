@@ -3,6 +3,11 @@ import type { RouteRecordRaw } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import MainLayout from '@/views/MainLayout.vue'
 import PracticePlanView from '@/views/PracticePlanView.vue'
+import SongDetailView from '@/views/SongDetailView.vue'
+import NotesView from '@/views/NotesView.vue'
+import AlbumView from '@/views/AlbumView.vue'
+import AboutView from '@/views/AboutView.vue'
+import AccountView from '@/views/AccountView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -23,6 +28,13 @@ const routes: RouteRecordRaw[] = [
         component: PracticePlanView,
         meta: { requiresAuth: true },
       },
+      { path: 'plans', name: 'plans', component: PracticePlanView },
+      { path: 'songs', name: 'songs', component: SongDetailView },
+      { path: 'notes', name: 'notes', component: NotesView },
+      { path: 'album', name: 'album', component: AlbumView },
+      { path: 'about', name: 'about', component: AboutView },
+      { path: 'account', name: 'account', component: AccountView },
+      { path: '', redirect: '/plans' },
     ],
   },
   // 404 重定向到计划页

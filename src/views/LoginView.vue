@@ -3,7 +3,7 @@
   <div class="login-page">
     <div class="login-container">
       <div class="image-section">
-        <img :src="Img" alt="hinaaaaaaaa" title="很喜欢的一张照片噜~" />
+        <img :src="Img" alt="hinaaaaaaaa" />
       </div>
 
       <div class="login-card">
@@ -48,6 +48,22 @@
       </div>
     </div>
   </div>
+
+  <!-- 新增装饰 -->
+  <div class="star-curtain">
+    <div
+      v-for="item in stars"
+      :key="item.id"
+      class="star-item"
+      :style="{
+        '--float-duration': item.duration + 's',
+        '--float-delay': item.delay + 's',
+      }"
+    >
+      <div class="dashed-line" :style="{ height: item.height + 'px' }"></div>
+      <span class="star" :style="{ animationDelay: item.twinkleDelay + 's' }">☆</span>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -89,6 +105,15 @@ const handleSubmit = () => {
   localStorage.setItem('username', form.username)
   router.push('/plans')
 }
+
+// 生成 10 条悬挂星的数据
+const stars = Array.from({ length: 10 }, (_, i) => ({
+  id: i,
+  height: Math.floor(Math.random() * (210 - 70 + 1) + 70), // 70~210px 随机高度
+  duration: (Math.random() * 1.8 + 2.0).toFixed(2), // 2.0~3.8s 浮动时长
+  delay: (Math.random() * 1.6 - 0.6).toFixed(2), // -0.6~1.0s 延迟
+  twinkleDelay: (Math.random() * 2.5).toFixed(2), // 星星闪烁延迟
+}))
 </script>
 
 <style scoped>
@@ -136,6 +161,29 @@ const handleSubmit = () => {
   max-height: 100%;
   object-fit: contain;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+/* 配图动效：悬浮时上下浮动 + 轻微缩放 */
+.image-section img {
+  transition: transform 0.3s ease;
+}
+
+.image-section img:hover {
+  animation: float 2s ease-in-out infinite;
+  transform: scale(1.02);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) scale(1.02);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0px) scale(1.02);
+  }
 }
 
 .login-card {
@@ -148,10 +196,10 @@ const handleSubmit = () => {
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  background: white;
+  background: rgb(247, 254, 255);
   padding: 1.8rem; /* 减小内边距，更紧凑 */
   border-radius: 0.8rem;
-  box-shadow: 0 0.6rem 2.5rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.6rem 2.5rem rgba(86, 88, 96, 0.353);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #ccc transparent;
@@ -234,7 +282,7 @@ input:focus {
 .btn-primary {
   width: 100%;
   padding: 0.7rem;
-  background-color: #6397f1;
+  background-color: #77c7f8;
   color: white;
   border: none;
   border-radius: 0.4rem;
@@ -246,7 +294,7 @@ input:focus {
 }
 
 .btn-primary:hover {
-  background-color: #4a82e0;
+  background-color: #5f9ae7;
 }
 
 .btn-primary:active {
@@ -258,6 +306,104 @@ input:focus {
   font-size: 0.85rem;
   margin-top: 0.6rem;
   text-align: center;
+}
+
+/* ----- 悬挂星群容器 (固定在视口顶部) ----- */
+.star-curtain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  z-index: 10;
+  pointer-events: none; /* 不干扰登录卡片交互 */
+  background: transparent;
+  padding: 0 12px;
+}
+
+/* 单个悬挂单元：虚线 + 星星, 垂直排列 */
+.star-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transform-origin: center top;
+  will-change: transform;
+
+  /* 改用 CSS 变量控制动画 */
+  animation: floatDrift var(--float-duration, 3s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+/* 垂下的虚线 — 蓝绿色、空心风格 */
+.dashed-line {
+  width: 0;
+  border-left: 2px dashed #65d7d9;
+  transition: height 0.2s ease;
+  filter: drop-shadow(0 0 1px rgba(43, 196, 186, 0.3));
+}
+
+/* 空心五角星 ☆ 字符风格 */
+.star {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin-top: -6px;
+  display: inline-block;
+  color: #48dcd2;
+  text-shadow: 0 0 3px rgba(70, 216, 206, 0.4);
+  transition: all 0.2s;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+  animation: starTwinkle 3s infinite alternate;
+}
+
+/* 上下浮动关键帧 */
+@keyframes floatDrift {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* 星星微光呼吸 */
+@keyframes starTwinkle {
+  0% {
+    opacity: 0.85;
+    text-shadow: 0 0 0px #2bc4ba;
+  }
+  100% {
+    opacity: 1;
+    text-shadow:
+      0 0 6px #7fe7e0,
+      0 0 2px #2bc4ba;
+  }
+}
+
+/* 响应式调整星星大小 */
+@media (max-width: 700px) {
+  .star {
+    font-size: 1.8rem;
+  }
+  .star-curtain {
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 550px) {
+  .star {
+    font-size: 1.5rem;
+  }
+  .dashed-line {
+    border-left-width: 1.5px;
+  }
 }
 
 @media (max-width: 768px) {

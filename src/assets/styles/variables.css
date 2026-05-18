@@ -1,0 +1,35 @@
+/* CSS 变量 - 蓝绿色主题 */
+:root {
+  /* 主色调：蓝绿渐变 */
+  --primary-color: #2bc4ba;
+  --primary-light: #7fe7e0;
+  --primary-dark: #1a9e95;
+
+  /* 背景色 */
+  --bg-gradient-start: #cffffe;
+  --bg-gradient-end: #ebf1f7;
+  --bg-surface: #f4ffff;
+  --primary-color-light: #e6f7f5; /* 浅蓝绿悬停背景 */
+
+  /* 文字色 */
+  --text-primary: #1f3d3c;
+  --text-secondary: #5a7c7a;
+  --text-muted: #8aa9a7;
+
+  /* 边框与阴影 */
+  --border-color: #e0f0ef;
+  --shadow-sm: 0 2px 8px rgba(43, 196, 186, 0.1);
+  --shadow-md: 0 4px 16px rgba(43, 196, 186, 0.15);
+
+  /* 状态色 */
+  --success: #2bc4ba;
+  --warning: #f0b27a;
+  --danger: #e87979;
+  --info: #6c9fcf;
+
+  /* 圆角、间距等 */
+  --radius-sm: 0.4rem;
+  --radius-md: 0.8rem;
+  --radius-lg: 1.2rem;
+  --spacing: 1rem;
+}
