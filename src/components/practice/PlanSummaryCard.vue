@@ -51,7 +51,7 @@ const progressClass = computed(() => {
 
 <style scoped>
 .plan-card {
-  background: var(--bg-surface, #fff);
+  background: var(--bg-card, #fff);
   border-radius: 0.8rem;
   box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.05));
   padding: 1rem;

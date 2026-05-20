@@ -148,7 +148,7 @@ const handleNavigate = (path: string) => {
   transform: translateY(-50%);
   width: 32px;
   height: 32px;
-  background-color: var(--bg-surface);
+  background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 50%;
   display: flex;

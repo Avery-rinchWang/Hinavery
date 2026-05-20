@@ -53,7 +53,7 @@ const activeNames = ref(props.groups.map((g) => `${g.dateStr}_${g.timeRange}_${g
   margin-bottom: 1.5rem;
 }
 :deep(.el-collapse-item__header) {
-  background: var(--bg-surface, #fff);
+  background: var(--bg-card, #fff);
   border-radius: 0.8rem;
   margin-bottom: 0.5rem;
   padding: 0.75rem 1rem;

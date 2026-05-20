@@ -9,15 +9,16 @@
   --bg-gradient-start: #cffffe;
   --bg-gradient-end: #ebf1f7;
   --bg-surface: #eeffff;
+  --bg-card: #e4faffbf;
   --primary-color-light: #e6f7f5; /* 浅蓝绿悬停背景 */
 
   /* 文字色 */
-  --text-primary: #1f3d3c;
-  --text-secondary: #5a7c7a;
-  --text-muted: #8aa9a7;
+  --text-primary: #366c6a;
+  --text-secondary: #3a6663;
+  --text-muted: #86b6b3;
 
   /* 边框与阴影 */
-  --border-color: #e0f0ef;
+  --border-color: #cfeceb;
   --shadow-sm: 0 2px 8px rgba(43, 196, 186, 0.1);
   --shadow-md: 0 4px 16px rgba(43, 196, 186, 0.15);
 

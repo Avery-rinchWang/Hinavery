@@ -55,7 +55,7 @@ const handleLogout = () => {
 <style scoped>
 .app-header {
   height: 60px;
-  background-color: var(--bg-surface, #ffffff);
+  background-color: #f9fffe;
   box-shadow: var(--shadow-sm, 0 2px 8px rgba(43, 196, 186, 0.1));
   display: flex;
   align-items: center;
