@@ -196,7 +196,7 @@ const stars = Array.from({ length: 10 }, (_, i) => ({
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  background: rgb(247, 254, 255);
+  background-color: var(--bg-surface);
   padding: 1.8rem; /* 减小内边距，更紧凑 */
   border-radius: 0.8rem;
   box-shadow: 0 0.6rem 2.5rem rgba(86, 88, 96, 0.353);

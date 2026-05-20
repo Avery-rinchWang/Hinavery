@@ -21,4 +21,9 @@ app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 
+// 初始化计划数据
+import { usePlanStore } from './stores/planStore'
+const planStore = usePlanStore()
+planStore.initPlans()
+
 app.mount('#app')

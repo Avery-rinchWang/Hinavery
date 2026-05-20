@@ -33,12 +33,18 @@ const handleOpenCreatePlan = () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #f5f7fa;
 }
 
 .main-content {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
+  /* 添加背景图，仅限内容区域 */
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.421), rgba(255, 255, 255, 0.483)),
+    url('@/assets/images/背景图.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>

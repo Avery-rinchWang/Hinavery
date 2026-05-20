@@ -3,11 +3,7 @@
   <aside :class="['sidebar', { collapsed: isCollapsed }]">
     <div class="sidebar-header">
       <div class="logo-icons" v-if="!isCollapsed">
-        <img :src="icon1" alt="pin1" />
-        <img :src="icon2" alt="pin2" />
-        <img :src="icon3" alt="pin3" />
-        <img :src="icon4" alt="pin4" />
-        <img :src="icon5" alt="pin5" />
+        <img v-for="(icon, idx) in iconList" :key="idx" :src="icon" :alt="`pin${idx + 1}`" />
       </div>
       <div class="toggle-btn" @click="toggleCollapse">
         <el-icon>
@@ -56,6 +52,7 @@ import icon2 from '@/assets/images/deco_pins018001.png'
 import icon3 from '@/assets/images/deco_pins016001.png'
 import icon4 from '@/assets/images/deco_pins020001.png'
 import icon5 from '@/assets/images/deco_pins019001.png'
+const iconList = [icon1, icon2, icon3, icon4, icon5]
 
 const emit = defineEmits<{
   (e: 'openCreatePlan'): void
