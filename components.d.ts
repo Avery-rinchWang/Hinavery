@@ -26,6 +26,7 @@ declare module 'vue' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
+    ElTag: typeof import('element-plus/es')['ElTag']
     LayoutHeader: typeof import('./src/components/common/LayoutHeader.vue')['default']
     LayoutSidebar: typeof import('./src/components/common/LayoutSidebar.vue')['default']
     PhotoUploader: typeof import('./src/components/album/PhotoUploader.vue')['default']

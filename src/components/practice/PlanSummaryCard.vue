@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="card-actions">
-      <button class="btn-text" @click="emit('viewDetail')">查看详情</button>
+      <button class="btn-text" @click="emit('viewDetail', plan.song)">查看详情</button>
       <button class="btn-primary-outline" @click="emit('edit')">编辑</button>
     </div>
   </div>
@@ -29,7 +29,7 @@ import { responsibleIconMap, getResponsibleList } from '@/utils/helpers'
 
 const props = defineProps<{ plan: Plan }>()
 const emit = defineEmits<{
-  (e: 'viewDetail'): void
+  (e: 'viewDetail', songName: string): void
   (e: 'edit'): void
 }>()
 
@@ -136,7 +136,7 @@ button {
 }
 .btn-text:hover {
   color: var(--primary-color, #2bc4ba);
-  background-color: var(--primary-color-light, #e6f7f5);
+  background-color: #ffffff;
 }
 .btn-primary-outline {
   background-color: transparent;

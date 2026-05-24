@@ -29,7 +29,12 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true },
       },
       { path: 'plans', name: 'plans', component: PracticePlanView },
-      { path: 'songs', name: 'songs', component: SongDetailView },
+      {
+        path: 'songs',
+        name: 'songs',
+        component: SongDetailView,
+        meta: { requiresAuth: true },
+      },
       { path: 'notes', name: 'notes', component: NotesView },
       { path: 'album', name: 'album', component: AlbumView },
       { path: 'about', name: 'about', component: AboutView },

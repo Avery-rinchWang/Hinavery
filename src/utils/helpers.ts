@@ -48,5 +48,6 @@ export const responsibleIconMap: Record<string, string> = {
 }
 
 export function getResponsibleList(responsibleStr: string): string[] {
-  return responsibleStr.split(',').map((s) => s.trim())
+  // 兼容中英文逗号
+  return responsibleStr.split(/[，,]/).map((s) => s.trim())
 }

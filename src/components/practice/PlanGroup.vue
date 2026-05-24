@@ -18,7 +18,7 @@
           v-for="plan in group.plans"
           :key="plan.id"
           :plan="plan"
-          @view-detail="() => emit('viewDetail', plan.id)"
+          @view-detail="(songName) => emit('viewDetail', songName)"
           @edit="() => emit('edit', plan.id)"
         />
       </div>
@@ -36,7 +36,7 @@ const props = defineProps<{
   groups: { dateStr: string; timeRange: string; location: string; plans: Plan[] }[]
 }>()
 const emit = defineEmits<{
-  (e: 'viewDetail', planId: string): void
+  (e: 'viewDetail', songName: string): void
   (e: 'edit', planId: string): void
 }>()
 

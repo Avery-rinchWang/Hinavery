@@ -48,11 +48,17 @@ export const usePlanStore = defineStore('plan', {
   },
 
   getters: {
-    groupedPlans(): { dateStr: string; timeRange: string; location: string; plans: Plan[] }[] {
+    groupedPlans(): {
+      key: string
+      dateStr: string
+      timeRange: string
+      location: string
+      plans: Plan[]
+    }[] {
       const map = groupPlansByDateTimeAndLocation(this.plans)
       return Array.from(map.entries()).map(([key, plans]) => {
         const [dateStr, timeRange, location] = key.split('_')
-        return { dateStr, timeRange, location, plans }
+        return { key, dateStr, timeRange, location, plans }
       })
     },
   },
