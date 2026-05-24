@@ -74,8 +74,8 @@ onMounted(() => {
 
 const groupList = computed(() => planStore.groupedPlans)
 
-const isCollapsed = ref(false) // 分组卡片区域是否折叠
-const activeGroupKey = ref<string | null>(null) // 当前选中的分组key，null表示全部
+const isCollapsed = ref(false)
+const activeGroupKey = ref<string | null>(null)
 
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value
@@ -83,7 +83,6 @@ const toggleCollapse = () => {
 
 const showAllPlans = () => {
   activeGroupKey.value = null
-  // 全部计划时自动展开分组卡片区域，方便用户重新选择
   if (isCollapsed.value) {
     isCollapsed.value = false
   }
@@ -105,7 +104,6 @@ const formatGroupTitle = (group: { dateStr: string; timeRange: string; location:
   return formatGroupTitleWithTime(group.dateStr, group.timeRange, group.location)
 }
 
-// 根据key获取分组标题和计划数量（用于折叠时显示单个卡片）
 const getGroupTitleByKey = (key: string) => {
   const group = groupList.value.find((g) => g.key === key)
   return group ? formatGroupTitle(group) : ''
@@ -114,10 +112,17 @@ const getGroupPlansCount = (key: string) => {
   const group = groupList.value.find((g) => g.key === key)
   return group ? group.plans.length : 0
 }
+
+// 确保这两个函数正常工作
+const handleViewDetail = (songName: string) => {
+  router.push({ path: '/songs', query: { highlight: songName } })
+}
+const handleEditPlan = (planId: string) => {
+  ElMessage.info(`编辑计划 ID: ${planId}`)
+}
 </script>
 
 <style scoped>
-/* 样式与之前相同，仅增加 .cards-single 用于折叠时单个卡片居中 */
 .practice-plan-view {
   max-width: 1400px;
   margin: 0 auto;

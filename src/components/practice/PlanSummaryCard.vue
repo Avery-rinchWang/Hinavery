@@ -17,7 +17,7 @@
     </div>
     <div class="card-actions">
       <button class="btn-text" @click="emit('viewDetail', plan.song)">查看详情</button>
-      <button class="btn-primary-outline" @click="emit('edit')">编辑</button>
+      <button class="btn-primary-outline" @click="emit('edit', plan.id)">编辑</button>
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ import { responsibleIconMap, getResponsibleList } from '@/utils/helpers'
 const props = defineProps<{ plan: Plan }>()
 const emit = defineEmits<{
   (e: 'viewDetail', songName: string): void
-  (e: 'edit'): void
+  (e: 'edit', planId: string): void
 }>()
 
 const responsibleList = computed(() => getResponsibleList(props.plan.responsible))
