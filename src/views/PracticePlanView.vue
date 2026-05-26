@@ -16,12 +16,10 @@
 
     <!-- 时间/地点卡片区域：根据折叠状态和是否选中决定显示内容 -->
     <div class="group-cards" v-if="!isCollapsed || (isCollapsed && activeGroupKey)">
-      <!-- 折叠状态：只显示选中的分组卡片 -->
-      <div v-if="isCollapsed && activeGroupKey" class="cards-single">
-        <div class="group-card active" @click="selectGroup(activeGroupKey)">
-          <div class="group-card-title">{{ getGroupTitleByKey(activeGroupKey) }}</div>
-          <div class="group-card-count">{{ getGroupPlansCount(activeGroupKey) }}个计划</div>
-        </div>
+      <!-- 折叠状态：只显示选中分组的文字（非卡片样式） -->
+      <div v-if="isCollapsed && activeGroupKey" class="group-text-single">
+        <span class="group-text-title">{{ getGroupTitleByKey(activeGroupKey) }}</span>
+        <span class="group-text-count">{{ getGroupPlansCount(activeGroupKey) }}个计划</span>
       </div>
       <!-- 展开状态：显示所有分组卡片 -->
       <div v-else class="cards-scroll">
@@ -113,7 +111,6 @@ const getGroupPlansCount = (key: string) => {
   return group ? group.plans.length : 0
 }
 
-// 确保这两个函数正常工作
 const handleViewDetail = (songName: string) => {
   router.push({ path: '/songs', query: { highlight: songName } })
 }
@@ -182,10 +179,26 @@ const handleEditPlan = (planId: string) => {
 .group-cards {
   margin-bottom: 2rem;
 }
-.cards-single {
+/* 折叠时显示的纯文字样式 */
+.group-text-single {
+  background: transparent;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--border-color, #e0f0ef);
+  font-size: 1rem;
+  color: var(--text-primary, #1f3d3c);
   display: flex;
-  justify-content: center;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
+.group-text-title {
+  font-weight: 500;
+}
+.group-text-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #5a7c7a);
+}
+/* 展开时的卡片样式 */
 .cards-scroll {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

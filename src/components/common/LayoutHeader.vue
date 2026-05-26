@@ -61,7 +61,6 @@ const handleLogout = () => {
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  z-index: 99;
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-color, #e0f0ef);
 }

@@ -15,6 +15,7 @@
         class="song-card"
         :class="{ 'highlight-card': group.song === highlightSong }"
       >
+        <!-- 左侧信息保持不变 -->
         <div class="card-left">
           <div class="song-info">
             <h3 class="song-title">{{ group.song }}</h3>
@@ -58,12 +59,22 @@
           </div>
         </div>
 
+        <!-- 右侧 notes 区域：每条记录增加编辑按钮 -->
         <div class="card-right">
           <div class="notes-label">练习情况</div>
           <div class="notes-content">
             <div v-for="(note, idx) in group.notesList" :key="idx" class="note-item">
-              <span class="note-time">{{ group.practices[idx]?.practiceTime || '' }}</span>
-              <span class="note-text">{{ note || '暂无记录' }}</span>
+              <div class="note-header">
+                <span class="note-time">{{ group.practices[idx]?.practiceTime || '' }}</span>
+                <el-button
+                  text
+                  size="small"
+                  :icon="Edit"
+                  @click="openNoteEdit(group, idx)"
+                  class="edit-note-btn"
+                />
+              </div>
+              <div class="note-text">{{ note || '暂无记录' }}</div>
             </div>
           </div>
         </div>
@@ -74,15 +85,25 @@
       <p>暂无练习计划</p>
       <button class="btn-text" @click="goBack">返回</button>
     </div>
+
+    <!-- 笔记编辑弹窗（仅修改 notes 字段） -->
+    <NoteEditModal
+      v-model="noteModalVisible"
+      :initial-note="currentNote"
+      :plan-id="currentPlanId"
+      @saved="handleNoteSaved"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, nextTick } from 'vue'
+import { computed, onMounted, ref, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ArrowLeft, Clock } from '@element-plus/icons-vue'
+import { ArrowLeft, Clock, Edit } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { usePlanStore } from '@/stores/planStore'
 import { responsibleIconMap, getResponsibleList } from '@/utils/helpers'
+import NoteEditModal from '@/components/common/NoteEditModal.vue'
 import type { Plan } from '@/types/models'
 
 const route = useRoute()
@@ -127,10 +148,9 @@ const groupedSongs = computed(() => {
   const result = Array.from(songMap.values()).map((group) => ({
     ...group,
     responsibleList: Array.from(group.responsibleSet),
-    progressList: [...new Map(group.progressList.map((p, i) => [p, i])).keys()], // 去重保序
+    progressList: [...new Map(group.progressList.map((p, i) => [p, i])).keys()],
   }))
 
-  // 高亮歌曲置顶
   if (highlightSong.value) {
     const idx = result.findIndex((g) => g.song === highlightSong.value)
     if (idx !== -1) {
@@ -157,6 +177,35 @@ const goBack = () => {
   router.push('/plans')
 }
 
+// 笔记编辑弹窗相关
+const noteModalVisible = ref(false)
+const currentNote = ref('')
+const currentPlanId = ref('')
+
+const openNoteEdit = (group: any, idx: number) => {
+  // 根据当前 group 和 idx 找到对应的计划 id
+  const plan = planStore.plans.find(
+    (p) =>
+      p.song === group.song &&
+      p.practiceTime === group.practices[idx].practiceTime &&
+      p.location === group.practices[idx].location,
+  )
+  if (plan) {
+    currentPlanId.value = plan.id
+    currentNote.value = plan.notes || ''
+    noteModalVisible.value = true
+  }
+}
+
+const handleNoteSaved = (newNote: string) => {
+  // 更新 store 中的 notes
+  planStore.updatePlan(currentPlanId.value, { notes: newNote })
+  ElMessage.success('笔记已更新')
+  noteModalVisible.value = false
+  // 刷新分组数据（store 是响应式的，界面会自动更新）
+}
+
+// 辅助样式函数
 const difficultyClass = (difficulty: string) => {
   if (difficulty === '简单') return 'difficulty-easy'
   if (difficulty === '中等') return 'difficulty-medium'
@@ -172,7 +221,7 @@ const progressClass = (progress: string) => {
 </script>
 
 <style scoped>
-/* 样式与之前保持一致，仅修改部分细节 */
+/* 原有样式保持不变，增加 note-header 布局 */
 .song-detail-view {
   max-width: 1200px;
   margin: 0 auto;
@@ -217,7 +266,7 @@ button {
   gap: 1.5rem;
 }
 .song-card {
-  background: var(--bg-surface, #fff);
+  background: var(--bg-card, #fff);
   border-radius: 1rem;
   box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
   padding: 1.5rem;
@@ -230,6 +279,7 @@ button {
 .highlight-card {
   border: 1px solid var(--primary-color, #2bc4ba);
   box-shadow: 0 0 0 1px var(--primary-color, #2bc4ba);
+  scroll-margin-top: 20px;
 }
 .card-left {
   flex: 2;
@@ -330,11 +380,24 @@ button {
   border-bottom: 1px dashed var(--border-color, #e0f0ef);
   padding-bottom: 0.6rem;
 }
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+.edit-note-btn {
+  padding: 0;
+  margin: 0;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.edit-note-btn:hover {
+  opacity: 1;
+}
 .note-time {
-  display: block;
   font-size: 0.7rem;
   color: var(--text-secondary, #5a7c7a);
-  margin-bottom: 0.2rem;
 }
 .note-text {
   font-size: 0.85rem;
