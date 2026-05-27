@@ -49,6 +49,9 @@
       </div>
     </div>
     <el-empty v-else description="暂无练习计划" />
+
+    <!-- 编辑计划弹窗（复用同一组件） -->
+    <PlanFormModal v-model="editModalVisible" :initial-data="editingPlan" @save="handleSaveEdit" />
   </div>
 </template>
 
@@ -60,6 +63,8 @@ import { Fold, Expand, Refresh } from '@element-plus/icons-vue'
 import { usePlanStore } from '@/stores/planStore'
 import PlanSummaryCard from '@/components/practice/PlanSummaryCard.vue'
 import { formatGroupTitleWithTime } from '@/utils/helpers'
+import PlanFormModal from '@/components/common/PlanFormModal.vue'
+import type { Plan } from '@/types/models'
 
 const router = useRouter()
 const planStore = usePlanStore()
@@ -111,11 +116,28 @@ const getGroupPlansCount = (key: string) => {
   return group ? group.plans.length : 0
 }
 
+// 编辑弹窗状态
+const editModalVisible = ref(false)
+const editingPlan = ref<Plan | null>(null)
+
 const handleViewDetail = (songName: string) => {
   router.push({ path: '/songs', query: { highlight: songName } })
 }
+
 const handleEditPlan = (planId: string) => {
-  ElMessage.info(`编辑计划 ID: ${planId}`)
+  const plan = planStore.plans.find((p) => p.id === planId)
+  if (plan) {
+    editingPlan.value = plan
+    editModalVisible.value = true
+  }
+}
+
+const handleSaveEdit = (planData: Omit<Plan, 'id'> | Plan) => {
+  if ('id' in planData && planData.id) {
+    planStore.updatePlan(planData.id, planData)
+    ElMessage.success('更新成功')
+    editModalVisible.value = false
+  }
 }
 </script>
 
