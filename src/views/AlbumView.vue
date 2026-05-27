@@ -17,7 +17,6 @@
     <div v-if="photos.length" class="photo-grid">
       <div v-for="photo in photos" :key="photo.id" class="photo-card">
         <img :src="photo.url" @click="previewImage(photo.url)" class="photo-img" />
-        <!-- 合并后的底部栏：左侧日期，右侧删除按钮 -->
         <div class="photo-footer">
           <span class="photo-date">{{ formatDate(photo.createdAt) }}</span>
           <el-button text :icon="Delete" type="danger" @click="confirmDelete(photo.id)" />
@@ -26,15 +25,15 @@
     </div>
     <el-empty v-else description="暂无照片，上传一些练习照片吧～" />
 
-    <!-- 预览弹窗：尺寸缩小，蓝绿色主题 -->
-    <el-dialog
-      v-model="previewVisible"
-      :width="previewDialogWidth"
-      :close-on-click-modal="true"
-      class="preview-dialog"
-    >
-      <img :src="previewUrl" class="preview-img" alt="预览" />
-    </el-dialog>
+    <!-- 预览弹窗 -->
+    <BaseModal v-model="previewVisible" width="600px" :show-close="true" @close="previewUrl = ''">
+      <template #header>
+        <!-- 不显示标题，只保留关闭按钮（showClose=true） -->
+      </template>
+      <div style="text-align: center">
+        <img :src="previewUrl" class="preview-img" alt="预览" />
+      </div>
+    </BaseModal>
   </div>
 </template>
 
@@ -43,6 +42,7 @@ import { ref, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Upload, Delete } from '@element-plus/icons-vue'
 import { useAlbumStore } from '@/stores/albumStore'
+import BaseModal from '@/components/common/BaseModal.vue'
 
 const albumStore = useAlbumStore()
 const photos = computed(() => albumStore.photos)
@@ -85,10 +85,6 @@ const confirmDelete = async (id: string) => {
 
 const previewVisible = ref(false)
 const previewUrl = ref('')
-// 动态宽度：大屏幕固定600px，小屏幕占85%宽度
-const previewDialogWidth = computed(() => {
-  return window.innerWidth < 768 ? '85vw' : '600px'
-})
 const previewImage = (url: string) => {
   previewUrl.value = url
   previewVisible.value = true
@@ -158,7 +154,6 @@ const formatDate = (isoString: string) => {
   object-fit: cover;
   cursor: pointer;
 }
-/* 底部栏：左右布局，日期在左，按钮在右 */
 .photo-footer {
   display: flex;
   justify-content: space-between;
@@ -169,41 +164,6 @@ const formatDate = (isoString: string) => {
 .photo-date {
   font-size: 0.75rem;
   color: var(--text-secondary, #5a7c7a);
-}
-/* 预览弹窗样式 */
-:deep(.preview-dialog .el-dialog) {
-  border-radius: 12px;
-  background-color: var(--bg-surface, #fff);
-  border: 1px solid var(--primary-color, #2bc4ba);
-}
-:deep(.preview-dialog .el-dialog__header) {
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--border-color, #e0f0ef);
-}
-/* 预览弹窗关闭按钮美化 */
-:deep(.preview-dialog .el-dialog__headerbtn) {
-  width: 32px;
-  height: 32px;
-  background: rgba(43, 196, 186, 0.1);
-  border-radius: 50%;
-  transition: all 0.2s;
-  top: 12px;
-  right: 12px;
-}
-:deep(.preview-dialog .el-dialog__headerbtn:hover) {
-  background: var(--primary-color, #2bc4ba);
-}
-:deep(.preview-dialog .el-dialog__headerbtn .el-dialog__close) {
-  color: var(--primary-color, #2bc4ba);
-  font-size: 18px;
-  font-weight: bold;
-}
-:deep(.preview-dialog .el-dialog__headerbtn:hover .el-dialog__close) {
-  color: white;
-}
-:deep(.preview-dialog .el-dialog__body) {
-  padding: 20px;
-  text-align: center;
 }
 .preview-img {
   max-width: 100%;

@@ -23,12 +23,7 @@
     <el-empty v-else description="还没有日记，写一篇吧～" />
 
     <!-- 新增/编辑弹窗 -->
-    <el-dialog
-      :title="isEdit ? '编辑日记' : '写日记'"
-      v-model="dialogVisible"
-      width="500px"
-      class="notes-dialog"
-    >
+    <BaseModal v-model="dialogVisible" :title="isEdit ? '编辑日记' : '写日记'" width="500px">
       <el-form :model="form" label-width="80px">
         <el-form-item label="标题" required>
           <el-input v-model="form.title" />
@@ -38,10 +33,10 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleSave">保存</el-button>
+        <button class="modal-btn modal-btn-default" @click="dialogVisible = false">取消</button>
+        <button class="modal-btn modal-btn-primary" @click="handleSave">保存</button>
       </template>
-    </el-dialog>
+    </BaseModal>
   </div>
 </template>
 
@@ -50,6 +45,7 @@ import { ref, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import { useNoteStore } from '@/stores/noteStore'
+import BaseModal from '@/components/common/BaseModal.vue'
 
 const noteStore = useNoteStore()
 const notes = computed(() => noteStore.notes)
@@ -178,5 +174,31 @@ const formatDate = (isoString: string) => {
   white-space: pre-wrap;
   line-height: 1.5;
   color: var(--text-primary, #1f3d3c);
+}
+
+/* 弹窗内按钮样式 */
+.modal-btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  background: transparent;
+}
+.modal-btn-default {
+  border: 1px solid var(--border-color, #e0f0ef);
+  color: var(--text-secondary, #5a7c7a);
+}
+.modal-btn-default:hover {
+  border-color: var(--primary-color, #2bc4ba);
+  color: var(--primary-color, #2bc4ba);
+}
+.modal-btn-primary {
+  background-color: var(--primary-color, #2bc4ba);
+  color: white;
+}
+.modal-btn-primary:hover {
+  background-color: var(--primary-dark, #1a9e95);
 }
 </style>
